@@ -7,22 +7,18 @@ def capture_person(cadr, face_location):
         os.mkdir("Faces")
 
     face = face_recognition.face_encodings(cadr, face_location)
-
-
-
     for folder in os.listdir("Faces"):
         person = pickle.loads(open(f"Faces/{folder}", "rb").read())
+
         try:
-            result = face_recognition.compare_faces(person["encodings"], face)
-            print(result)
+            result = face_recognition.compare_faces(person["encodings"], face[0])
+            print("result",result)
             if True in result:
                 return person["name"]
-        except:
-            print(Exception)
-            continue
+        except Exception as ex:
+            print(ex)
 
-
-    cv2.imshow("cadr", cadr)
+    # cv2.imshow("cadr", cadr)
     name_person = input("Who is this???")
 
     data = {
@@ -41,6 +37,7 @@ def detect_face_in_video():
     if video.isOpened():
         while True:
             _,cadr = video.read()
+
             face = face_recognition.face_locations(cadr)
             print(_,face)
             for face_loc in face:
